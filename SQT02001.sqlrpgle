@@ -60,4 +60,5 @@ Exec SQL
   CLOSE c1;
 
 *inLR=*on;
+
 return;
