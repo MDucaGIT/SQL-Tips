@@ -1,0 +1,80 @@
+--  Generazione SQL
+--  Versione:            V7R5M0 220415
+--  Database relazionale: PUB400
+--  Opzioni standard:    Db2 for i
+
+CREATE OR REPLACE TABLE MDUCA1.EMPLOYEE (
+  EMID INTEGER GENERATED ALWAYS AS IDENTITY (
+  START WITH 1 INCREMENT BY 10
+  NO MINVALUE NO MAXVALUE
+  CYCLE NO ORDER
+  CACHE 20 )
+  ,
+  EMSURNAME CHAR(20)  NOT NULL DEFAULT '' ,
+  EMFIRSTNM CHAR(15)  NOT NULL DEFAULT '' ,
+  EMADDR1   CHAR(30)  NOT NULL DEFAULT '' ,
+  EMADDR2   CHAR(20)  NOT NULL DEFAULT '' ,
+  EMCITY    CHAR(20)  NOT NULL DEFAULT '' ,
+  EMCOUNTRY CHAR(20)  NOT NULL DEFAULT '' ,
+  EMCTYCODE CHAR(2)   DEFAULT '' ,
+  EMPHONE1  CHAR(12)  NOT NULL DEFAULT '' ,
+  EMPHONE2  CHAR(12)  NOT NULL DEFAULT '' ,
+  EMSTATUS  CHAR(1)   NOT NULL DEFAULT 'P' ,
+  EMDOB     DATE      DEFAULT NULL ,
+  EMDTSTART DATE     DEFAULT NULL ,
+  EMDTEND   DATE     DEFAULT NULL ,
+  EMINSNR   CHAR(9)  NOT NULL DEFAULT '' ,
+  EMGRDREF  CHAR(8)  NOT NULL DEFAULT '' ,
+  EMGRDCK   CHAR(1)  NOT NULL DEFAULT '' ,
+  EMDEPT    CHAR(3)  NOT NULL DEFAULT '' ,
+  EMSEX     CHAR(1)  DEFAULT '' ,
+  EMSALARY  DECIMAL(9, 2) NOT NULL DEFAULT 0 IMPLICITLY HIDDEN ,
+  EMBONUS   INTEGER NOT NULL DEFAULT 500 )
+
+  RCDFMT EMPLOYEE    ;
+
+LABEL ON COLUMN MDUCA1.EMPLOYEE
+( EMID        IS 'Employee            ID' ,
+  EMSURNAME   IS 'Surname' ,
+  EMFIRSTNM   IS 'First               Name' ,
+  EMADDR1     IS 'Address' ,
+  EMADDR2     IS 'Address' ,
+  EMCITY      IS 'City' ,
+  EMCOUNTRY   IS 'Country' ,
+  EMCTYCODE   IS 'Country Code' ,
+  EMPHONE1    IS 'Telephone           Number' ,
+  EMPHONE2    IS 'Telephone           Number' ,
+  EMSTATUS    IS 'Status          P=Perm            S=SubCon' ,
+  EMDOB       IS 'Date                Of                Birth' ,
+  EMDTSTART   IS 'Starting            Date' ,
+  EMDTEND     IS 'Leaving             Date' ,
+  EMINSNR     IS 'National            Insurance         Number' ,
+  EMGRDREF    IS 'Grid                Reference' ,
+  EMGRDCK     IS 'Grid                Check' ,
+  EMDEPT      IS 'Department' ,
+  EMSEX       IS 'Sex' ,
+  EMSALARY    IS 'Salary' ,
+  EMBONUS     IS 'Employee            Bonus' ) ;
+
+LABEL ON COLUMN MDUCA1.EMPLOYEE
+( EMID        TEXT IS 'Employee ID' ,
+  EMSURNAME   TEXT IS 'Surname' ,
+  EMFIRSTNM   TEXT IS 'First Name' ,
+  EMADDR1     TEXT IS 'Address' ,
+  EMADDR2     TEXT IS 'Address' ,
+  EMCITY      TEXT IS 'City' ,
+  EMCOUNTRY   TEXT IS 'Country' ,
+  EMCTYCODE   TEXT IS 'Country Code' ,
+  EMPHONE1    TEXT IS 'Telephone Number' ,
+  EMPHONE2    TEXT IS 'Telephone Number' ,
+  EMSTATUS    TEXT IS 'Status P=Perm S=SubCon' ,
+  EMDOB       TEXT IS 'Date Of Birth' ,
+  EMDTSTART   TEXT IS 'Starting Date' ,
+  EMDTEND     TEXT IS 'Leaving Date' ,
+  EMINSNR     TEXT IS 'National Insurance Number' ,
+  EMGRDREF    TEXT IS 'Grid Reference' ,
+  EMGRDCK     TEXT IS 'Grid Check' ,
+  EMDEPT      TEXT IS 'Department' ,
+  EMSEX       TEXT IS 'Sex' ,
+  EMSALARY    TEXT IS 'Salary' ,
+  EMBONUS     TEXT IS 'Employee Bonus' ) ;
