@@ -7,3 +7,4 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #001: Removing unused objects from libraries
 ### #002: Reading IFS Files with SQL
 ### #003: Writing IFS Files with SQL
+### #004: Create JSON document from SQL table or physical file
