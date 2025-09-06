@@ -1,0 +1,176 @@
+{
+  "Books": [
+    {
+      "BookID": "B001",
+      "Title": "The Quantum Paradox",
+      "Authors": ["Dr. Alistair Finch", "Prof. Eleanor Vance"],
+      "Genre": "Science Fiction",
+      "PublicationYear": 2022,
+      "ISBN": "978-1234567890"
+    },
+    {
+      "BookID": "B005",
+      "Title": "Chronicles of Eldoria",
+      "Authors": ["Lyra Meadows"],
+      "Genre": "Epic Fantasy",
+      "PublicationYear": 2019,
+      "ISBN": "978-9988776655"
+    },
+    {
+      "BookID": "B002",
+      "Title": "Whispers of the Forgotten City",
+      "Authors": ["Seraphina Lumina", "Kaelen Thorne"],
+      "Genre": "Fantasy",
+      "PublicationYear": 2021,
+      "ISBN": "978-0987654321"
+    },
+    {
+      "BookID": "B006",
+      "Title": "The Midnight Garden",
+      "Authors": ["Elias Blackwood"],
+      "Genre": "Gothic Fiction",
+      "PublicationYear": 2020,
+      "ISBN": "978-7766554433"
+    },
+    {
+      "BookID": "B003",
+      "Title": "The Silent Witness",
+      "Authors": ["Detective Miles Corbin", "Dr. Vivian Holloway", "Chief Inspector Lee"],
+      "Genre": "Mystery",
+      "PublicationYear": 2023,
+      "ISBN": "978-1122334455"
+    },
+    {
+      "BookID": "B007",
+      "Title": "Beyond the Horizon",
+      "Authors": ["Cassandra Wren"],
+      "Genre": "Adventure",
+      "PublicationYear": 2018,
+      "ISBN": "978-3322110099"
+    },
+    {
+      "BookID": "B004",
+      "Title": "Echoes in the Code",
+      "Authors": ["Ava Sterling", "Dr. Ben Carter"],
+      "Genre": "Thriller",
+      "PublicationYear": 2024,
+      "ISBN": "978-5544332211"
+    },
+    {
+      "BookID": "B008",
+      "Title": "A Recipe for Disaster",
+      "Authors": ["Chef Antoine Dubois"],
+      "Genre": "Humor",
+      "PublicationYear": 2017,
+      "ISBN": "978-8877665544"
+    },
+    {
+      "BookID": "B009",
+      "Title": "Starlight Serenade",
+      "Authors": ["Luna Nova"],
+      "Genre": "Romance",
+      "PublicationYear": 2016,
+      "ISBN": "978-6655443322"
+    },
+    {
+      "BookID": "B010",
+      "Title": "The Last Cartographer",
+      "Authors": ["Finnian Rivers"],
+      "Genre": "Historical Fiction",
+      "PublicationYear": 2015,
+      "ISBN": "978-4433221100"
+    }
+  ],
+  "Magazines": [
+    {
+      "MagazineID": "M001",
+      "Title": "Science Today",
+      "Publisher": "Global Insights Inc.",
+      "Genre": "Science & Research",
+      "Frequency": "Monthly",
+      "FirstPublicationYear": 1995,
+      "ISSN": "1234-567X"
+    },
+    {
+      "MagazineID": "M002",
+      "Title": "Digital Trends Weekly",
+      "Publisher": "TechNet Publishing",
+      "Genre": "Technology",
+      "Frequency": "Weekly",
+      "FirstPublicationYear": 2010,
+      "ISSN": "8765-432Y"
+    },
+    {
+      "MagazineID": "M003",
+      "Title": "Fashion Forward",
+      "Publisher": "Chic Media Group",
+      "Genre": "Fashion & Lifestyle",
+      "Frequency": "Quarterly",
+      "FirstPublicationYear": 2005,
+      "ISSN": "1122-334Z"
+    },
+    {
+      "MagazineID": "M004",
+      "Title": "Culinary Delights",
+      "Publisher": "Gourmet Press",
+      "Genre": "Cooking",
+      "Frequency": "Bi-Monthly",
+      "FirstPublicationYear": 2000,
+      "ISSN": "5544-332A"
+    },
+    {
+      "MagazineID": "M005",
+      "Title": "World History Quarterly",
+      "Publisher": "Chronicle Books",
+      "Genre": "History",
+      "Frequency": "Quarterly",
+      "FirstPublicationYear": 1988,
+      "ISSN": "9988-776B"
+    },
+    {
+      "MagazineID": "M006",
+      "Title": "Auto Enthusiast",
+      "Publisher": "Engine Roar Publications",
+      "Genre": "Automotive",
+      "Frequency": "Monthly",
+      "FirstPublicationYear": 1975,
+      "ISSN": "7766-554C"
+    },
+    {
+      "MagazineID": "M007",
+      "Title": "Art & Expression",
+      "Publisher": "Creative Minds Collective",
+      "Genre": "Arts & Culture",
+      "Frequency": "Annually",
+      "FirstPublicationYear": 2015,
+      "ISSN": "3322-110D"
+    },
+    {
+      "MagazineID": "M008",
+      "Title": "Fitness & Wellbeing",
+      "Publisher": "Healthy Living Inc.",
+      "Genre": "Health",
+      "Frequency": "Monthly",
+      "FirstPublicationYear": 2008,
+      "ISSN": "8877-665E"
+    },
+    {
+      "MagazineID": "M009",
+      "Title": "Gaming Horizons",
+      "Publisher": "Pixel Play Media",
+      "Genre": "Gaming",
+      "Frequency": "Monthly",
+      "FirstPublicationYear": 2012,
+      "ISSN": "6655-443F"
+    },
+    {
+      "MagazineID": "M010",
+      "Title": "Travel Discoveries",
+      "Publisher": "Wanderlust Guides",
+      "Genre": "Travel",
+      "Frequency": "Bi-Annually",
+      "FirstPublicationYear": 2003,
+      "ISSN": "4433-221G"
+    }
+  ]
+}
