@@ -9,3 +9,4 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #003: Writing IFS Files with SQL
 ### #004: Create JSON document from SQL table or physical file
 ### #005: Parsing JSON documents to tabular format
+### #006: Calling REST APIs and parsing the response
