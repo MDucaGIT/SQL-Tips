@@ -11,3 +11,4 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #005: Parsing JSON documents to tabular format
 ### #006: Calling REST APIs and parsing the response
 ### #007: Displaying Database Relations with SQL
+### #008: Retrieve physical file(s) a logical file depends on
