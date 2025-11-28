@@ -13,3 +13,4 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #007: Displaying Database Relations with SQL
 ### #008: Retrieve physical file(s) a logical file depends on
 ### #010: Get call stack info. *SRVPGM and sample programs
+### #011: Create custom SQL functions (UDF) from RPG service programs
