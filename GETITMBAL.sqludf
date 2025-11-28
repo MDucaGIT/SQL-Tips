@@ -1,0 +1,49 @@
+01	-- Function getItemBalance
+02	--  Returns warehouse item balance to date
+03	--
+04	--  Parameters:
+05	--  IN   VARCHAR(1) - Item Type
+06	--  IN   VARCHAR(40) - Item code
+07	--  IN   VARCHAR(3) - Warehouse code
+08	--  IN   DATE       - Balance date
+09	--  OUT  NUMERIC(13, 2) - Balance
+10	--
+11	--  Compile instructions:
+12	--  RUNSQLSTM  SRCFILE(myLib/mySrcFile) SRCMBR(GETITMBAL) COMMIT(*NONE)
+13	--   MARGINS(100) DFTRDBCOL(myObjLib)
+14	
+15	 CREATE OR REPLACE FUNCTION getItemBalance(
+16	 pItemType      VARCHAR(1),
+17	 pItemCode      VARCHAR(40),
+18	 pWhsCode       VARCHAR(3),
+19	 pDate          DATE
+20	 )
+21	
+22	 RETURNS  NUMERIC(13, 2)
+23	 SPECIFIC getItemBalance
+24	 LANGUAGE RPGLE
+25	 PROGRAM TYPE SUB
+26	 EXTERNAL NAME SQT11001(getItemBalance)
+27	 PARAMETER STYLE GENERAL
+28	 NOT DETERMINISTIC
+29	 READS SQL DATA
+30	 ;
+31	
+32	 ---
+33	 --- additional function when pDate parameter is omitted
+34	 ---
+35	  CREATE OR REPLACE FUNCTION getItemBalance(
+36	 pItemType      VARCHAR(1),
+37	 pItemCode      VARCHAR(40),
+38	 pWhsCode       VARCHAR(3)
+39	 )
+40	
+41	 RETURNS  NUMERIC(13, 2)
+42	 SPECIFIC getItemBalance2
+43	 LANGUAGE RPGLE
+44	 PROGRAM TYPE SUB
+45	 EXTERNAL NAME SQT11001(getItemBalance2)
+46	 PARAMETER STYLE GENERAL
+47	 NOT DETERMINISTIC
+48	 READS SQL DATA
+49	 ;
