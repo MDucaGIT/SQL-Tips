@@ -1,0 +1,37 @@
+--
+-- Warehouse transactions
+--
+
+CREATE OR REPLACE TABLE WhsTra00f  (
+Annul       CHAR(1)  NOT NULL DEFAULT ' ',
+TrnProg     NUMERIC(9, 0) NOT NULL DEFAULT 0,
+WhsCode     CHAR(3) NOT NULL DEFAULT ' ' ,
+TrnDate     DATE NOT NULL ,
+TrnCode     CHAR(03) NOT NULL DEFAULT ' ',
+TrnSign     CHAR(01) NOT NULL DEFAULT ' ' ,
+ItemType    CHAR(01) NOT NULL DEFAULT ' ' ,
+ItemCode    CHAR(40) NOT NULL DEFAULT ' ',
+UM          CHAR(02) NOT NULL DEFAULT ' ' ,
+Quantity    NUMERIC(9, 2) NOT NULL DEFAULT 0,
+TimeIns     TIMESTAMP NOT NULL DEFAULT CURRENT TIMESTAMP,
+TimeUpd     TIMESTAMP NOT NULL
+          FOR EACH ROW ON UPDATE AS ROW CHANGE TIMESTAMP,
+PRIMARY KEY (TrnProg)
+)
+RCDFMT WhsTra
+;
+LABEL ON COLUMN WhsTra00f (
+Annul          TEXT IS 'A=Annulled  '         ,
+TrnProg        TEXT IS 'Transaction Progr.Number',
+WhsCode        TEXT IS 'Warehouse code'          ,
+TrnDate        TEXT IS 'Transaction date'        ,
+TrnCode        TEXT IS 'Transaction code'        ,
+TrnSign        TEXT IS 'Transaction Sign +/-'    ,
+ItemType       TEXT IS 'Item type'               ,
+ItemCode       TEXT IS 'Item code'               ,
+UM             TEXT IS 'Unit of measure'         ,
+Quantity       TEXT IS 'Transaction quantity'    ,
+TimeIns        TEXT IS 'Insert time'     ,
+TimeUpd        TEXT IS 'Last update time'
+)
+;

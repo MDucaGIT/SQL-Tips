@@ -1,0 +1,35 @@
+--
+-- Item Master Table
+--
+
+CREATE OR REPLACE TABLE ItemMs00f  (
+Annul       CHAR(1)  NOT NULL DEFAULT ' ',
+ItemID      INTEGER GENERATED ALWAYS AS IDENTITY,
+ItemType    CHAR(01) NOT NULL DEFAULT ' ' ,
+ItemCode    CHAR(40) NOT NULL DEFAULT ' ',
+ItemDesc    CHAR(80) NOT NULL DEFAULT ' ',
+UM          CHAR(02) NOT NULL DEFAULT ' ' ,
+CategoryCode CHAR(04) NOT NULL DEFAULT ' ' ,
+DateStart   DATE NOT NULL DEFAULT '0001-01-01',
+DateEnd     DATE NOT NULL DEFAULT '9999-12-31',
+TimeIns     TIMESTAMP NOT NULL DEFAULT CURRENT TIMESTAMP,
+TimeUpd     TIMESTAMP NOT NULL
+          FOR EACH ROW ON UPDATE AS ROW CHANGE TIMESTAMP,
+PRIMARY KEY (ItemID)
+)
+RCDFMT ItemMs
+;
+LABEL ON COLUMN ItemMs00f (
+Annul          TEXT IS 'A=Annulled  '    ,
+ItemID         TEXT IS 'Item ID'   ,
+ItemType       TEXT IS 'Item Type  '     ,
+ItemCode       TEXT IS 'Item code  '     ,
+ItemDesc       TEXT IS 'Description  '   ,
+UM             TEXT IS 'Unit of measure ',
+CategoryCode   TEXT IS 'Category code'   ,
+DateStart      TEXT IS 'Sold since '     ,
+DateEnd        TEXT IS 'End selling date  ' ,
+TimeIns        TEXT IS 'Insert time'     ,
+TimeUpd        TEXT IS 'Last update time'
+)
+;

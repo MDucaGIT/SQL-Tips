@@ -1,0 +1,25 @@
+--
+-- To create function, run command:
+-- RUNSQLSTM SRCFILE(mySrcLib/mySrcFile) SRCMBR(GETITMWHS)
+-- COMMIT(*NONE) DFTRDBCOL(myObjLib)
+--
+CREATE OR REPLACE FUNCTION getItemsWhs (
+ pWhs       VARCHAR(3) DEFAULT('***')
+)
+RETURNS TABLE
+(
+Item_Type   CHAR(1) ,
+Item_Code   CHAR(40) ,
+Item_Desc   CHAR(80) ,
+Warehouse   CHAR(3) ,
+UM          CHAR(2) ,
+Balance     NUMERIC(13, 2)
+)
+
+SPECIFIC GETITEMSWHS
+EXTERNAL NAME    SQT12001(GETITEMSWHS)
+LANGUAGE RPGLE
+PARAMETER STYLE DB2SQL
+READS SQL DATA
+NOT DETERMINISTIC
+;
