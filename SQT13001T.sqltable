@@ -1,0 +1,13 @@
+--                                           
+-- Table for holding spool file data         
+--                                           
+                                             
+CREATE OR REPLACE TABLE SQT13001T (          
+Progr      NUMERIC(9, 0),                    
+Whs        CHAR(3),                          
+ItemType   CHAR(1),                          
+ItemCode   CHAR(40),                         
+UM         CHAR(2),                          
+Quantity   NUMERIC(9, 2)                     
+)                                            
+;                                            
