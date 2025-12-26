@@ -1,0 +1,35 @@
+      * ---------------------------------------------------------------
+      * SQL Tips #13 - Printer file
+      * ---------------------------------------------------------------
+                                            REF(WHSTRA00F)
+                R HEADER
+                                            SKIPB(2)
+                  VTODAY         8  0      2  EDTCDE(Y)
+                                          25' WAREHOUSE TRANSACTIONS -
+                                            REPORT '
+                                          66'Page:'
+                                          72PAGNBR EDTCDE(Z)
+                  VPGM          10        81
+                  VLINE1        90         2 SPACEB(1)
+                                           2 'Progr.' SPACEB(1)
+                                          12 'Whs. '
+                                          18 'T'
+                                          20 'Item '
+                                          62 'UM'
+                                          65 'Quantity'
+                                          80 'Date'
+                                          12 'Code ' SPACEB(1)
+                                          20 'Code '
+                  VLINE2        90         2 SPACEB(1)
+      * --------------------------------------------------------------------
+                R LINE
+                  VPROGR    R              2SPACEB(1)
+                                            REFFLD(TRNPROG)
+                  VWHS      R             12REFFLD(WHSCODE)
+                  VTYPE     R             18REFFLD(ITEMTYPE)
+                  VITEM     R             20REFFLD(ITEMCODE)
+                  VUM       R             62REFFLD(UM)
+                  VQTY      R             65REFFLD(QUANTITY)
+                                            EDTCDE(J)
+                  VDATE          8  0     80
+                                            EDTCDE(Y)
