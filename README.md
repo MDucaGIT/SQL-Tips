@@ -15,3 +15,4 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #010: Get call stack info. *SRVPGM and sample programs
 ### #011: Create custom SQL functions (UDF) from RPG service programs
 ### #012: Create User Defined Table Functions (UDTF) from RPG service programs
+### #013: Converting Spooled Files Data into Physical Files
