@@ -16,3 +16,4 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #011: Create custom SQL functions (UDF) from RPG service programs
 ### #012: Create User Defined Table Functions (UDTF) from RPG service programs
 ### #013: Converting Spooled Files Data into Physical Files
+### #014: Creating Excel spreadsheets from physical files
