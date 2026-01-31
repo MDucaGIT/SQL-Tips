@@ -1,0 +1,92 @@
+-- Function getPgmRef
+--  Returns table with program references
+--
+--  Parametri:
+--  IN   CHAR(10)   - Program name
+--  IN   CHAR(10)   - Program library
+--  IN   CHAR(1)    - Include system objects Y/N
+--  OUT  TABLE      - Program references
+
+CREATE OR REPLACE FUNCTION getPgmRef (
+ PROGRAM_NAME      CHAR(10) ,
+ PROGRAM_LIBRARY   CHAR(10) DEFAULT '*LIBL',
+ INCLUDE_SYS_OBJ   CHAR(3)  DEFAULT('NO')
+ )
+ RETURNS TABLE (
+  pgmLib    CHAR(10),
+  pgmName   CHAR(10),
+  pgmTxt    CHAR(50),
+  refObj    CHAR(11),
+  refLib    CHAR(11),
+  refType   CHAR(10),
+  refUsage  CHAR(11)
+  )
+
+SPECIFIC getPgmRef
+LANGUAGE SQL
+NOT DETERMINISTIC
+MODIFIES SQL DATA
+SET OPTION DBGVIEW = *SOURCE
+
+BEGIN
+
+   DECLARE EOF INTEGER DEFAULT 0 ;
+   DECLARE string   VARCHAR(2000) ;
+   DECLARE usage    CHAR(11) ;
+   DECLARE msg_error  VARCHAR(500);
+
+   DECLARE EXIT HANDLER FOR SQLEXCEPTION
+   BEGIN
+        SET msg_error = 'ERROR: DSPPGMREF failed for program '
+            CONCAT TRIM(PROGRAM_LIBRARY) CONCAT '/' CONCAT TRIM(PROGRAM_NAME);
+        CALL SYSTOOLS.LPRINTF(msg_error);
+        -- Send error and terminate
+        SIGNAL SQLSTATE '75001'
+            SET MESSAGE_TEXT = msg_error;
+   END;
+
+   IF INCLUDE_SYS_OBJ NOT IN ('YES', 'NO') THEN
+   SET INCLUDE_SYS_OBJ = 'NO';
+   END IF;
+
+   SET string = 'DROP TABLE IF EXISTS QTEMP.OUTPGMREF' ;
+   CALL SYSTOOLS.LPRINTF(STRING) ;
+   EXECUTE IMMEDIATE string;
+
+   SET string = 'DSPPGMREF PGM('
+       CONCAT TRIM(PROGRAM_LIBRARY) CONCAT '/'
+       CONCAT TRIM(PROGRAM_NAME)
+       CONCAT ') OUTPUT(*OUTFILE) OUTFILE(QTEMP/OUTPGMREF)' ;
+   CALL SYSTOOLS.LPRINTF(STRING) ;
+   CALL qsys2.qcmdexc(string);
+
+
+   FOR c1 CURSOR FOR
+    SELECT whLib, whPnam, whText,
+      whFnam, whLnam, whOtyp, whFusg
+    FROM Qtemp.OutPgmRef
+    WHERE INCLUDE_SYS_OBJ = 'YES' OR
+      whLnam NOT LIKE 'Q%'
+    FOR READ ONLY
+
+    DO
+
+      CASE whFusg
+      WHEN '1' THEN SET usage = 'INPUT';
+      WHEN '2' THEN SET usage = 'OUTPUT';
+      WHEN '3' THEN SET usage = 'INP/OUT';
+      WHEN '4' THEN SET usage = 'UPDATE';
+      WHEN '5' THEN SET usage = 'INP/UPD';
+      WHEN '6' THEN SET usage = 'OUT/UPD';
+      WHEN '7' THEN SET usage = 'INP/OUT/UPD';
+      WHEN '8' THEN SET usage = 'NOT SPEC';
+      WHEN '0' THEN SET usage = 'N/A';
+      ELSE SET usage = 'N/A';
+      END CASE;
+      PIPE (whLib, whPnam, whText, whFnam, whLnam, whOtyp, usage);
+
+   END FOR ;
+
+   RETURN  ;
+
+END;
