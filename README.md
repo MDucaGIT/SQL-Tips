@@ -18,3 +18,5 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #013: Converting Spooled Files Data into Physical Files
 ### #014: Creating Excel spreadsheets from physical files
 ### #015: Sending emails with SQL
+### #016: User-defined functions in pure SQL
+### #017: SQL triggers
