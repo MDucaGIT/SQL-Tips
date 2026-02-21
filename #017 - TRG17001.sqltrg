@@ -1,0 +1,59 @@
+CREATE OR REPLACE TRIGGER TRG17001
+AFTER INSERT OR DELETE OR UPDATE ON WHSTRA00F
+REFERENCING NEW ROW AS n OLD ROW AS o
+FOR EACH ROW MODE DB2ROW
+
+BEGIN
+DECLARE tstamp TIMESTAMP ;
+DECLARE oldQty NUMERIC(9, 2);
+DECLARE newQty NUMERIC(9, 2);
+DECLARE itemTypeW CHAR(1);
+DECLARE itemCodeW CHAR(40);
+DECLARE whsW      CHAR(3);
+
+SET oldQty = 0;
+SET newQty = 0;
+SET itemTypeW = ' ';
+SET itemCodeW = ' ';
+SET whsW = ' ';
+
+-- set old and new quantities for balance update
+IF INSERTING THEN
+SET newQty = n.quantity * (CASE WHEN n.trnSign = '-' THEN -1 ELSE 1 END);
+SET itemTypeW = n.itemType;
+SET itemCodeW = n.itemCode;
+SET whsW = n.WhsCode;
+END IF;
+
+IF UPDATING THEN
+SET oldQty = o.quantity * (CASE WHEN o.trnSign = '-' THEN -1 ELSE 1 END);
+SET newQty = n.quantity * (CASE WHEN n.trnSign = '-' THEN -1 ELSE 1 END);
+SET itemTypeW = n.itemType;
+SET itemCodeW = n.itemCode;
+SET whsW = n.WhsCode;
+END IF;
+
+IF DELETING THEN
+SET oldQty = o.quantity * (CASE WHEN o.trnSign = '-' THEN -1 ELSE 1 END);
+SET itemTypeW = o.itemType;
+SET itemCodeW = o.itemCode;
+SET whsW = o.WhsCode;
+END IF;
+
+-- balance update
+MERGE INTO WHSBAL00F bal
+USING WHSTRA00F tra
+ON ( bal.ItemType, bal.ItemCode, bal.WhsCode) =
+(whsW, itemTypeW, itemCodeW)
+WHEN MATCHED THEN
+    UPDATE SET
+    bal.InStock = bal.InStock + newQty - oldQty
+WHEN NOT MATCHED THEN
+    INSERT (WhsCode, ItemType, ItemCode,
+    UM, InStock)
+    VALUES (whsW, itemTypeW, itemCodeW,
+    COALESCE(o.UM, n.UM),
+    newQty )
+ELSE IGNORE;
+
+END ;
