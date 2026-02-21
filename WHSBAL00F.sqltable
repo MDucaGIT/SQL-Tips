@@ -1,0 +1,33 @@
+--                                                            
+-- Warehouse balance per Item                                 
+--                                                            
+                                                              
+CREATE OR REPLACE TABLE WhsBal00f  (                          
+Annul       CHAR(1)  NOT NULL DEFAULT ' ',                    
+WhsCode     CHAR(3) NOT NULL DEFAULT ' ' ,                    
+ItemType    CHAR(01) NOT NULL DEFAULT ' ' ,                   
+ItemCode    CHAR(40) NOT NULL DEFAULT ' ',                    
+UM          CHAR(02) NOT NULL DEFAULT ' ' ,                   
+InStock     NUMERIC(9, 2) NOT NULL DEFAULT 0,                 
+InOrder     NUMERIC(9, 2) NOT NULL DEFAULT 0,                 
+InProduction     NUMERIC(9, 2) NOT NULL DEFAULT 0,            
+TimeIns     TIMESTAMP NOT NULL DEFAULT CURRENT TIMESTAMP,     
+TimeUpd     TIMESTAMP NOT NULL                                
+          FOR EACH ROW ON UPDATE AS ROW CHANGE TIMESTAMP,     
+PRIMARY KEY (ItemType, ItemCode, WhsCode)                     
+)                                                             
+RCDFMT WhsBal                                                 
+;                                                             
+LABEL ON COLUMN WhsBal00f (                                   
+Annul          TEXT IS 'A=Annulled  '            ,            
+WhsCode        TEXT IS 'Warehouse code'          ,            
+ItemType       TEXT IS 'Item type'               ,   
+ItemCode       TEXT IS 'Item code'               ,   
+UM             TEXT IS 'Unit of measure'         ,   
+InStock        TEXT IS 'Current balance'         ,   
+InOrder        TEXT IS 'Ordered balance'         ,   
+InProduction   TEXT IS 'In production balance'   ,   
+TimeIns        TEXT IS 'Insert time'     ,           
+TimeUpd        TEXT IS 'Last update time'            
+)                                                    
+;                                                    
