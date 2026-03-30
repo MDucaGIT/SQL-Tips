@@ -1,0 +1,25 @@
+--
+-- Conversion factors between unit of measure
+--
+
+CREATE OR REPLACE TABLE UMConv00F  (
+Annul       CHAR(1)  NOT NULL DEFAULT ' ',
+UMFrom      CHAR(2) NOT NULL DEFAULT ' ' ,
+UMTo        CHAR(2) NOT NULL DEFAULT ' ' ,
+ConvFactor  NUMERIC(11, 5) NOT NULL DEFAULT 0,
+TimeIns     TIMESTAMP NOT NULL DEFAULT CURRENT TIMESTAMP,
+TimeUpd     TIMESTAMP NOT NULL
+          FOR EACH ROW ON UPDATE AS ROW CHANGE TIMESTAMP,
+PRIMARY KEY (UMFrom, UMTo)
+)
+RCDFMT UMConv
+;
+LABEL ON COLUMN UMConv00F (
+Annul          TEXT IS 'A=Annulled  '     ,
+UMFrom         TEXT IS 'From UM'          ,
+UMTo           TEXT IS 'To UM'            ,
+ConvFactor     TEXT IS 'Conversion factor'   ,
+TimeIns        TEXT IS 'Insert time'      ,
+TimeUpd        TEXT IS 'Last update time'
+)
+;

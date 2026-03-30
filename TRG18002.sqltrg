@@ -1,0 +1,63 @@
+CREATE OR REPLACE TRIGGER TRG18002
+BEFORE INSERT OR UPDATE ON WHSTRA00F
+REFERENCING NEW ROW AS n OLD ROW AS o
+FOR EACH ROW MODE DB2ROW
+SET OPTION DBGVIEW = *SOURCE, OUTPUT = *PRINT
+
+BEGIN
+DECLARE tstamp TIMESTAMP ;
+DECLARE oldQty NUMERIC(9, 2);
+DECLARE newQty NUMERIC(9, 2);
+DECLARE itemUM      CHAR(2);
+DECLARE convFactor  NUMERIC(9, 5);
+DECLARE EXIT_SQLCODE      INT;
+DECLARE EXIT_REASONCODE   INT;
+DECLARE EXIT_SQLSTATE CHAR(5);
+DECLARE EXIT_MSG_TEXT VARCHAR(1000);
+DECLARE msgTxt       CHAR(1000);
+
+DECLARE div_by_zero CONDITION FOR SQLSTATE '22012';
+DECLARE EXIT HANDLER FOR div_by_zero
+BEGIN
+    SET msgTxt = 'Error in TRG18002. ' ||
+        ' Conversion factor between ' || n.UM ||
+        ' and '   || itemUM ||
+        ' not found. ' ;
+    CALL systools.lprintf(msgTxt)    ;
+    SIGNAL SQLSTATE '75002'
+      SET MESSAGE_TEXT = msgTxt;
+    SET n.quantity = 0;
+END;
+
+DECLARE EXIT HANDLER FOR sqlexception
+BEGIN
+    GET DIAGNOSTICS CONDITION 1
+    EXIT_SQLSTATE = RETURNED_SQLSTATE,
+    EXIT_SQLCODE = DB2_RETURNED_SQLCODE,
+    EXIT_REASONCODE = DB2_REASON_CODE,
+    EXIT_MSG_TEXT = MESSAGE_TEXT;
+    SET msgTxt = 'Error in TRG18002. SQLCODE: ' ||
+        CAST(EXIT_SQLCODE AS CHAR(10)) ||
+        ' SQLSTATE: ' || EXIT_SQLSTATE ||
+        ' Reason: '   || EXIT_REASONCODE ||
+        ' Message: ' || TRIM(EXIT_MSG_TEXT);
+    CALL systools.lprintf(msgTxt)    ;
+    SIGNAL SQLSTATE '75003'
+      SET MESSAGE_TEXT = msgTxt;
+    SET n.quantity = 0;
+END;
+
+-- if transaction's UM different from Item's one, convert it
+SET itemUM = COALESCE((SELECT UM FROM ItemMs00f i WHERE
+(i.ItemType, i.ItemCode) = (n.ItemType, n.ItemCode)
+LIMIT 1), '??');
+IF  n.UM <> itemUM THEN
+   SET convFactor = COALESCE((SELECT c.convFactor
+   FROM UMConv00f c WHERE
+   (c.UMFrom, c.UMTo) = (n.UM, itemUM) LIMIT 1), 0);
+   SET n.UM = itemUM;
+   SET n.Quantity = n.Quantity / convFactor;
+END IF;
+
+
+END ;

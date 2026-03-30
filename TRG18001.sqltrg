@@ -1,0 +1,77 @@
+CREATE OR REPLACE TRIGGER TRG18001
+AFTER INSERT OR DELETE OR UPDATE ON WHSTRA00F
+REFERENCING NEW ROW AS n OLD ROW AS o
+FOR EACH ROW MODE DB2ROW
+SET OPTION DBGVIEW = *SOURCE, OUTPUT = *PRINT
+
+BEGIN
+DECLARE tstamp TIMESTAMP ;
+DECLARE oldQty NUMERIC(9, 2);
+DECLARE newQty NUMERIC(9, 2);
+DECLARE itemTypeW CHAR(1);
+DECLARE itemCodeW CHAR(40);
+DECLARE whsW      CHAR(3);
+DECLARE EXIT_SQLCODE INT;
+DECLARE EXIT_SQLSTATE CHAR(5);
+DECLARE EXIT_MSG_TEXT VARCHAR(1000);
+DECLARE errText VARCHAR(1000);
+
+DECLARE EXIT HANDLER FOR sqlexception
+BEGIN
+    GET DIAGNOSTICS CONDITION 1
+    EXIT_SQLSTATE = RETURNED_SQLSTATE,
+    EXIT_SQLCODE = DB2_RETURNED_SQLCODE,
+    EXIT_MSG_TEXT = MESSAGE_TEXT;
+    SET errText = 'Error in TRG18001. SQLCODE: ' ||
+        CAST(EXIT_SQLCODE AS CHAR(10)) ||
+        ' SQLSTATE: ' || EXIT_SQLSTATE ||
+        ' Message: ' || TRIM(EXIT_MSG_TEXT);
+  SIGNAL SQLSTATE '75001' SET MESSAGE_TEXT = errText;
+END;
+
+SET oldQty = 0;
+SET newQty = 0;
+SET itemTypeW = ' ';
+SET itemCodeW = ' ';
+SET whsW = ' ';
+
+-- set old and new quantities for balance update
+IF INSERTING THEN
+SET newQty = n.quantity * (CASE WHEN n.trnSign = '-' THEN -1 ELSE 1 END);
+SET itemTypeW = n.itemType;
+SET itemCodeW = n.itemCode;
+SET whsW = n.WhsCode;
+END IF;
+
+IF UPDATING THEN
+SET oldQty = o.quantity * (CASE WHEN o.trnSign = '-' THEN -1 ELSE 1 END);
+SET newQty = n.quantity * (CASE WHEN n.trnSign = '-' THEN -1 ELSE 1 END);
+SET itemTypeW = n.itemType;
+SET itemCodeW = n.itemCode;
+SET whsW = n.WhsCode;
+END IF;
+
+IF DELETING THEN
+SET oldQty = o.quantity * (CASE WHEN o.trnSign = '-' THEN -1 ELSE 1 END);
+SET itemTypeW = o.itemType;
+SET itemCodeW = o.itemCode;
+SET whsW = o.WhsCode;
+END IF;
+
+-- balance update
+MERGE INTO WHSBAL00F bal
+USING (VALUES( whsW, itemTypeW, itemCodeW ) )
+ON ( bal.WhsCode, bal.ItemType, bal.ItemCode ) =
+(whsW, itemTypeW, itemCodeW)
+WHEN MATCHED THEN
+    UPDATE SET
+    bal.InStock = bal.InStock + newQty - oldQty
+WHEN NOT MATCHED THEN
+    INSERT (WhsCode, ItemType, ItemCode,
+    UM, InStock)
+    VALUES (whsW, itemTypeW, itemCodeW,
+    COALESCE(o.UM, n.UM),
+    newQty )
+ELSE IGNORE;
+
+END ;
