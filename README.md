@@ -20,3 +20,4 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #015: Sending emails with SQL
 ### #016: User-defined functions in pure SQL
 ### #017: SQL triggers
+### #018: Error handling in SQL triggers
