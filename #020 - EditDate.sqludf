@@ -1,0 +1,94 @@
+-- Function editDate
+--  Returns edited date in char format
+--
+--  Parameters:
+--  IN   NUMERIC(8, 0) - Input Date in whatever format
+--  IN   CHAR(1) - Separator
+--  IN   CHAR(3) - Day in letters YES/NO
+--  IN   CHAR(4) - Format of the date
+--  OUT  CHAR(30) - Edited date
+--
+--  Compile instructions:
+--  RUNSQLSTM  SRCFILE(myLib/mySrcFile) SRCMBR(EDITDATE) COMMIT(*NONE)
+--   MARGINS(100) DFTRDBCOL(myObjLib)
+
+DROP SPECIFIC FUNCTION IF EXISTS EDITDATE1 ;
+CREATE OR REPLACE FUNCTION EDITDATE (
+    P_DATEIN    NUMERIC(8, 0),
+    P_SEP       CHAR(1),
+    P_DAYLET    CHAR(3) DEFAULT 'NO',
+    P_FORMAT    CHAR(5) DEFAULT '*DMYY'
+)
+RETURNS CHAR(30)
+LANGUAGE SQL
+SPECIFIC EDITDATE1
+DETERMINISTIC
+READS SQL DATA
+RETURNS NULL ON NULL INPUT
+BEGIN
+    DECLARE V_DATEISO DATE;
+    DECLARE V_DATEOUT CHAR(30);
+    DECLARE wrongDate CONDITION FOR SQLSTATE '22007';
+    DECLARE EXIT HANDLER FOR wrongDate
+    BEGIN
+        RETURN '*ERROR - Invalid date';
+    END;
+
+    -- check parameters
+    IF P_FORMAT NOT IN ('*DMYY', '*MDYY', '*YYMD') THEN
+        RETURN '*ERROR - Invalid format';
+    END IF;
+
+    IF P_FORMAT IN ('*DMYY', '*MDYY') THEN
+        -- converts input date in char format
+        SET V_DATEOUT = SUBSTR(DIGITS(P_DATEIN), 1, 2) CONCAT P_SEP CONCAT
+                        SUBSTR(DIGITS(P_DATEIN), 3, 2) CONCAT P_SEP CONCAT
+                        SUBSTR(DIGITS(P_DATEIN), 5, 4);
+    ELSE
+        SET V_DATEOUT = SUBSTR(DIGITS(P_DATEIN), 7, 2) CONCAT P_SEP CONCAT
+                    SUBSTR(DIGITS(P_DATEIN), 5, 2) CONCAT P_SEP CONCAT
+                    SUBSTR(DIGITS(P_DATEIN), 1, 4);
+    END IF;
+    IF P_DAYLET = 'YES' THEN
+        -- converts input date in ISO format
+        CASE WHEN P_FORMAT = '*DMYY' THEN
+                SET V_DATEISO = TO_DATE(DIGITS(P_DATEIN), 'DDMMYYYY');
+            WHEN P_FORMAT = '*MDYY' THEN
+                SET V_DATEISO = TO_DATE(DIGITS(P_DATEIN), 'MMDDYYYY');
+            WHEN P_FORMAT = '*YYMD' THEN
+                SET V_DATEISO = TO_DATE(DIGITS(P_DATEIN), 'YYYYMMDD');
+            ELSE SET V_DATEISO = NULL;
+        END CASE;
+        -- converts date in output format with day in letters
+        SET V_DATEOUT = DAYNAME(V_DATEISO) CONCAT ' ' CONCAT V_DATEOUT;
+
+    END IF;
+
+    RETURN V_DATEOUT;
+END;
+
+--- Implementation 2: input date in VARCHAR format
+
+DROP SPECIFIC FUNCTION IF EXISTS EDITDATE2 ;
+
+CREATE OR REPLACE FUNCTION EDITDATE (
+    P_DATEIN    VARCHAR(10),
+    P_SEP       CHAR(1),
+    P_DAYLET    CHAR(3) DEFAULT 'NO',
+    P_FORMAT    CHAR(5) DEFAULT '*DMYY'
+)
+RETURNS CHAR(30)
+LANGUAGE SQL
+SPECIFIC EDITDATE2
+DETERMINISTIC
+READS SQL DATA
+RETURNS NULL ON NULL INPUT
+BEGIN
+    DECLARE V_DATEOUT CHAR(30);
+    DECLARE V_DATENUM DECIMAL(8, 0);
+
+    SET V_DATENUM = CAST(P_DATEIN AS NUMERIC(8, 0));
+    -- Invokes main function casting input date in numeric format
+    RETURN EDITDATE(V_DATENUM,
+    P_SEP, P_DAYLET, P_FORMAT);
+END;
