@@ -21,3 +21,4 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #016: User-defined functions in pure SQL
 ### #017: SQL triggers
 ### #018: Error handling in SQL triggers
+### #020: Function overloading in SQL & RPG
