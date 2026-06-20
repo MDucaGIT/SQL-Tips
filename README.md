@@ -22,3 +22,5 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #017: SQL triggers
 ### #018: Error handling in SQL triggers
 ### #020: Function overloading in SQL & RPG
+### #021: Date and time operations in SQL
+### #022: OLAP Functions
