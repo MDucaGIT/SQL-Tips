@@ -27,3 +27,4 @@ Tips, tricks, scripts, programs, suggestions for better exploiting SQL on DB2 fo
 ### #023: Masking sensitive data 
 ### #024: Clean or move IFS files
 ### #025: Secret DB2 Table functions
+### #026: DB2 for i Services
