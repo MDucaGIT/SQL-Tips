@@ -1,0 +1,75 @@
+--- PARSE_STATEMENT
+WITH stmt (txt) AS (
+VALUES(
+'WITH A AS (
+SELECT  whscode, itemcode, trndate, trnsign, 
+CASE WHEN TRNSIGN = ''-'' THEN QUANTITY*(-1)
+	ELSE QUANTITY END QTY
+FROM	mduca1.whstra00f
+ORDER BY whscode, itemcode, trndate
+)
+SELECT whscode, itemcode, trndate, QTY,
+sum(QTY) over(PARTITION BY whscode, itemcode ORDER BY trndate) AS running_tot
+FROM 	a
+ORDER BY whscode, itemcode, trndate'
+)
+) 
+SELECT name_type, name, SCHEMA, column_name, 
+usage_type, name_start_position, sql_statement_type
+FROM   stmt
+CROSS JOIN TABLE(qsys2.parse_statement(
+SQL_STATEMENT => txt
+)) p
+;
+--- HARVEST_INDEX_ADVICE 
+CALL systools.HARVEST_INDEX_ADVICE (
+'MDUCA1',     -- schema
+'WHSTRA00F',   -- table
+'1' ,          -- times advised
+'0'	,		  -- mti-used
+'0' ,         -- average-estimate
+'MDUCA1' ,	  -- output library
+'QHARV'       -- output file
+)
+;
+-- show all members created by HARVEST_INDEX_ADVICE
+WITH list AS (
+  SELECT SYSTEM_TABLE_MEMBER AS mbr_name
+  FROM QSYS2.SYSMEMBERSTAT
+  WHERE SYSTEM_TABLE_SCHEMA = 'MDUCA1' 
+    AND SYSTEM_TABLE_NAME = 'QHARV'
+)
+SELECT 
+  m.mbr_name, 
+  f.LINE_NUMBER, 
+  f.LINE
+FROM list m
+CROSS JOIN TABLE(
+  QSYS2.IFS_READ(
+  PATH_NAME => '/QSYS.LIB/MDUCA1.LIB/QHARV.FILE/' || m.mbr_name || '.MBR'
+  )
+) f
+ORDER BY m.mbr_name, f.LINE_NUMBER
+;
+---- GENERATE_SQL_OBJECTS
+-- create a table with objects to be converted to DDL 
+CREATE TABLE MDUCA1.DDS2DDL ( 
+OBJECT_SCHEMA VARCHAR(258), 
+OBJECT_NAME VARCHAR(258), 
+SQL_OBJECT_TYPE CHAR(10)
+)
+;
+CALL QSYS2.GENERATE_SQL_OBJECTS(
+SYSTEM_TABLE_NAME => 'DDS2DDL' ,
+SYSTEM_TABLE_SCHEMA => 'MDUCA1' ,
+DATABASE_SOURCE_FILE_LIBRARY_NAME => 'MDUCA1',
+DATABASE_SOURCE_FILE_NAME => 'QDDS2DDL',
+DATABASE_SOURCE_FILE_MEMBER => 'BNKTRA',
+REPLACE_OPTION => '1',
+STATEMENT_FORMATTING_OPTION => '0',
+LABEL_OPTION => '1',
+PRIVILEGES_OPTION => '0',
+CREATE_OR_REPLACE_OPTION => '1',
+INDEX_INSTEAD_OF_VIEW_OPTION => '1'
+)
+;
